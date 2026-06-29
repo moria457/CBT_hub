@@ -490,7 +490,35 @@ function ConceptTab() {
 
 ההמשגה גם כוללת הבנת הרקע ההתפתחותי שיצר את אמונות הליבה, והדרכים שהמטופל מתמודד איתן (הימנעות, פיצוי, כניעה).
 
-המשגה טובה מאפשרת לתכנן טיפול ממוקד, לצפות קשיים, ולהסביר למטופל למה הטיפול בנוי כפי שהוא בנוי.`;
+המשגה טובה מאפשרת לתכנן טיפול ממוקד, לצפות קשיים, ולהסביר למטופל למה הטיפול בנוי כפי שהוא בנוי.
+
+─────────────────────────────
+
+פורמולציה (Formulation) — מה זה ואיך עושים?
+
+בעוד ההמשגה היא "המפה המלאה" של המטופל, הפורמולציה היא הסבר ממוקד למצב ספציפי — מדוע הבעיה הנוכחית מתרחשת ומה מנציח אותה. אפשר לחשוב עליה כך: ההמשגה היא הספר, הפורמולציה היא הפרק הרלוונטי.
+
+הפורמולציה מבוססת על מודל ה-5P הנפוץ בקליניקה:
+
+1. Predisposing (גורמי רקע) — מה ברקע ובהיסטוריה של המטופל תרם להתפתחות הבעיה? גנטיקה, חוויות ילדות, אישיות.
+
+2. Precipitating (גורמים מפעילים) — מה גרם לבעיה להופיע עכשיו? אירוע חיים, שינוי, משבר.
+
+3. Perpetuating (גורמים מנציחים) — מה שומר על הבעיה ומונע ממנה להיפתר? הימנעות, מחשבות שליליות, דפוסים.
+
+4. Protective (גורמי הגנה) — מה שומר על המטופל? חוזקות, תמיכה חברתית, מוטיבציה.
+
+5. Presenting (הבעיה המוצגת) — מה המטופל מתאר כסיבה לפנייה?
+
+─────────────────────────────
+
+דוגמה קצרה — מטופלת עם דיכאון:
+
+Predisposing: אמא דיכאונית, ביקורת תמידית בבית — אמונת ליבה "אני לא מספיקה"
+Precipitating: פיטורים מהעבודה לפני 3 חודשים
+Perpetuating: מסתגרת בבית, מפסיקה לעשות דברים שאהבה, מחשבות "לא שווה לנסות"
+Protective: קשר טוב עם אחות, מוטיבציה לחזור לעבודה, הייתה בטיפול בעבר וזה עזר
+Presenting: "אני לא מצליחה לקום בבוקר ואין לי כוח לכלום"`;
 
   return (
     <div>
@@ -605,6 +633,31 @@ function ConceptTab() {
         <button onClick={() => setSaved(true)} style={{ background: "#1D4ED8", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontWeight: 700, fontSize: 16, cursor: "pointer", fontFamily: "inherit" }}>
           💾 שמור המשגה
         </button>
+
+        {/* פורמולציה 5P */}
+        <div style={{ borderTop: "2px dashed #E2E8F0", paddingTop: 18 }}>
+          <div style={{ fontWeight: 700, fontSize: 16, color: "#1E293B", marginBottom: 4 }}>פורמולציה קלינית — מודל 5P</div>
+          <div style={{ fontSize: 13, color: "#6B7280", marginBottom: 16 }}>הסבר ממוקד למצב הנוכחי של המטופל</div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {[
+              { key: "p1", color: "#7E22CE", bg: "#FDF4FF", border: "#E9D5FF", label: "1️⃣ Predisposing — גורמי רקע", placeholder: "מה ברקע תרם להתפתחות הבעיה? גנטיקה, חוויות ילדות, אישיות..." },
+              { key: "p2", color: "#C2410C", bg: "#FFF7ED", border: "#FED7AA", label: "2️⃣ Precipitating — גורמים מפעילים", placeholder: "מה גרם לבעיה להופיע עכשיו? אירוע חיים, שינוי, משבר..." },
+              { key: "p3", color: "#B91C1C", bg: "#FEF2F2", border: "#FECACA", label: "3️⃣ Perpetuating — גורמים מנציחים", placeholder: "מה שומר על הבעיה? הימנעות, מחשבות שליליות, דפוסים..." },
+              { key: "p4", color: "#15803D", bg: "#F0FDF4", border: "#BBF7D0", label: "4️⃣ Protective — גורמי הגנה", placeholder: "מה שומר על המטופל? חוזקות, תמיכה חברתית, מוטיבציה..." },
+              { key: "p5", color: "#0369A1", bg: "#F0F9FF", border: "#BAE6FD", label: "5️⃣ Presenting — הבעיה המוצגת", placeholder: "מה המטופל מתאר כסיבה לפנייה?" },
+            ].map(({ key, color, bg, border, label, placeholder }) => (
+              <div key={key} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 12, padding: "14px 16px" }}>
+                <label style={{ ...lbl, color }}>{label}</label>
+                <textarea value={answers[key] || ""} onChange={e => setVal(key, e.target.value)} placeholder={placeholder} style={{ ...ta, background: "#fff", border: `1px solid ${border}` }} />
+              </div>
+            ))}
+          </div>
+
+          <button onClick={() => setSaved(true)} style={{ background: "#7E22CE", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontWeight: 700, fontSize: 16, cursor: "pointer", fontFamily: "inherit", width: "100%", marginTop: 14 }}>
+            💾 שמור פורמולציה
+          </button>
+        </div>
       </div>
     </div>
   );
