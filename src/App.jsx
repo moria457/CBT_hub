@@ -459,6 +459,157 @@ function IntakeTab() {
   );
 }
 
+function ConceptTab() {
+  const [answers, setAnswers] = useState({});
+  const [saved, setSaved] = useState(false);
+  const [showExplain, setShowExplain] = useState(false);
+
+  function setVal(id, val) { setAnswers(a => ({ ...a, [id]: val })); }
+
+  const inp = { width: "100%", padding: "9px 12px", borderRadius: 8, fontSize: 14, border: "1.5px solid #E2E8F0", outline: "none", background: "#FAFAFA", boxSizing: "border-box", fontFamily: "inherit", direction: "rtl" };
+  const ta = { ...inp, minHeight: 80, resize: "vertical" };
+  const lbl = { fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 5, display: "block" };
+  const secTitle = (icon, title, sub) => (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ background: "linear-gradient(135deg,#1E40AF,#0EA5E9)", borderRadius: 10, padding: "10px 14px" }}>
+        <div style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>{icon} {title}</div>
+        {sub && <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, marginTop: 2 }}>{sub}</div>}
+      </div>
+    </div>
+  );
+
+  const EXPLAIN = `המשגה קלינית (Case Conceptualization) היא המפה שמנחה את הטיפול. היא עוזרת למטפל להבין לא רק מה המטופל מרגיש — אלא למה, ומה מנציח את הקושי.
+
+לפי ג'ודית בק, ההמשגה בנויה משלוש רמות:
+
+1. אמונות ליבה (Core Beliefs) — המשקפיים שדרכן המטופל רואה את עצמו, העולם והעתיד. מתפתחות בילדות ונחשבות כאמת מוחלטת.
+
+2. אמונות ביניים (Intermediate Beliefs) — כללים, הנחות ועמדות שנובעות מאמונות הליבה. לדוגמה: "אם אעשה כל דבר בשלמות, אני שווה ערך."
+
+3. מחשבות אוטומטיות (Automatic Thoughts) — מחשבות ספונטניות שעולות במצבים ספציפיים ומשפיעות על הרגש וההתנהגות.
+
+ההמשגה גם כוללת הבנת הרקע ההתפתחותי שיצר את אמונות הליבה, והדרכים שהמטופל מתמודד איתן (הימנעות, פיצוי, כניעה).
+
+המשגה טובה מאפשרת לתכנן טיפול ממוקד, לצפות קשיים, ולהסביר למטופל למה הטיפול בנוי כפי שהוא בנוי.`;
+
+  return (
+    <div>
+      {/* כותרת */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 17, color: "#1E293B" }}>טופס המשגה קלינית</div>
+          <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2 }}>לפי מודל ג'ודית בק — CBT Case Conceptualization</div>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={() => setShowExplain(v => !v)} style={{ background: "#EFF6FF", color: "#1D4ED8", border: "1px solid #BFDBFE", borderRadius: 8, padding: "8px 14px", fontWeight: 600, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>
+            {showExplain ? "סגור הסבר" : "💡 מה זה המשגה?"}
+          </button>
+          <button onClick={() => setSaved(true)} style={{ background: "#1D4ED8", color: "#fff", border: "none", borderRadius: 8, padding: "8px 14px", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>💾 שמור</button>
+        </div>
+      </div>
+
+      {/* הסבר */}
+      {showExplain && (
+        <div style={{ background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 14, padding: "18px 18px", marginBottom: 18 }}>
+          <div style={{ fontWeight: 700, fontSize: 14, color: "#1D4ED8", marginBottom: 10 }}>💡 מה זה המשגה קלינית?</div>
+          <div style={{ fontSize: 13, color: "#1E3A5F", lineHeight: 1.85, whiteSpace: "pre-line" }}>{EXPLAIN}</div>
+        </div>
+      )}
+
+      {saved && <div style={{ background: "#F0FDF4", border: "1px solid #BBF7D0", borderRadius: 10, padding: "10px 14px", marginBottom: 14, color: "#15803D", fontWeight: 600 }}>✅ ההמשגה נשמרה!</div>}
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
+        {/* פרטי מטופל */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("👤", "פרטי מטופל")}
+          <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ flex: 1 }}><label style={lbl}>שם</label><input value={answers.name || ""} onChange={e => setVal("name", e.target.value)} style={inp} /></div>
+            <div style={{ flex: 1 }}><label style={lbl}>גיל</label><input value={answers.age || ""} onChange={e => setVal("age", e.target.value)} style={inp} /></div>
+          </div>
+          <div style={{ marginTop: 12 }}><label style={lbl}>אבחנה ראשית (DSM-5)</label><input value={answers.dx || ""} onChange={e => setVal("dx", e.target.value)} placeholder="לדוגמה: הפרעת דיכאון מג'ורי (MDD)" style={inp} /></div>
+          <div style={{ marginTop: 12 }}><label style={lbl}>בעיה מוצגת ומטרות הטיפול</label><textarea value={answers.presenting || ""} onChange={e => setVal("presenting", e.target.value)} placeholder="מה מביא את המטופל לטיפול? מה הוא רוצה להשיג?" style={ta} /></div>
+        </div>
+
+        {/* רקע התפתחותי */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("📖", "רקע התפתחותי", "אירועים ונסיבות שעיצבו את אמונות הליבה")}
+          <label style={lbl}>חוויות ילדות משמעותיות</label>
+          <textarea value={answers.childhood || ""} onChange={e => setVal("childhood", e.target.value)} placeholder="אירועים, קשרים, אווירה משפחתית שהשפיעו על התפתחות האמונות..." style={ta} />
+          <div style={{ marginTop: 12 }}><label style={lbl}>אירועי חיים מרכזיים / טראומות</label>
+          <textarea value={answers.trauma || ""} onChange={e => setVal("trauma", e.target.value)} placeholder="אובדנים, טראומות, מעברים משמעותיים..." style={ta} /></div>
+        </div>
+
+        {/* אמונות ליבה */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("🔴", "אמונות ליבה (Core Beliefs)", "אמונות עמוקות על עצמי, העולם והעתיד")}
+          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8, padding: "10px 12px", marginBottom: 14, fontSize: 12, color: "#991B1B" }}>
+            💡 דוגמאות: "אני חסר ערך" / "אני חלש" / "אני לא אהוב" / "העולם מסוכן" / "אנשים לא אמינים"
+          </div>
+          <label style={lbl}>אמונות ליבה לגבי עצמי</label>
+          <textarea value={answers.cb_self || ""} onChange={e => setVal("cb_self", e.target.value)} placeholder='לדוגמה: "אני לא מספיק טוב", "אני כישלון"' style={ta} />
+          <div style={{ marginTop: 12 }}><label style={lbl}>אמונות ליבה לגבי אחרים / העולם</label>
+          <textarea value={answers.cb_world || ""} onChange={e => setVal("cb_world", e.target.value)} placeholder='לדוגמה: "אנשים יזנחו אותי", "העולם מסוכן"' style={ta} /></div>
+          <div style={{ marginTop: 12 }}><label style={lbl}>אמונות ליבה לגבי העתיד</label>
+          <textarea value={answers.cb_future || ""} onChange={e => setVal("cb_future", e.target.value)} placeholder='לדוגמה: "אין לי עתיד", "לעולם לא אצליח"' style={ta} /></div>
+        </div>
+
+        {/* אמונות ביניים */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("🟡", "אמונות ביניים (Intermediate Beliefs)", "כללים, הנחות ועמדות הנובעות מאמונות הליבה")}
+          <div style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 8, padding: "10px 12px", marginBottom: 14, fontSize: 12, color: "#92400E" }}>
+            💡 דוגמאות: "אם אצליח בכל דבר — אני שווה" / "אסור לי לבקש עזרה" / "אם אהיה חזק — לא יפגעו בי"
+          </div>
+          <label style={lbl}>כללים ועמדות</label>
+          <textarea value={answers.ib_rules || ""} onChange={e => setVal("ib_rules", e.target.value)} placeholder='לדוגמה: "חייב תמיד להצליח כדי שיאהבו אותי"' style={ta} />
+          <div style={{ marginTop: 12 }}><label style={lbl}>הנחות (אם... אז...)</label>
+          <textarea value={answers.ib_assume || ""} onChange={e => setVal("ib_assume", e.target.value)} placeholder='לדוגמה: "אם אפשל — אאבד את אהבת האנשים"' style={ta} /></div>
+        </div>
+
+        {/* אסטרטגיות התמודדות */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("⚙️", "אסטרטגיות התמודדות", "הדרכים שהמטופל מתמודד עם אמונות הליבה")}
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div>
+              <label style={{ ...lbl, color: "#7E22CE" }}>🔵 הימנעות (Avoidance)</label>
+              <textarea value={answers.cope_avoid || ""} onChange={e => setVal("cope_avoid", e.target.value)} placeholder="ממה המטופל נמנע? מצבים, אנשים, רגשות..." style={ta} />
+            </div>
+            <div>
+              <label style={{ ...lbl, color: "#C2410C" }}>🔶 פיצוי יתר (Overcompensation)</label>
+              <textarea value={answers.cope_over || ""} onChange={e => setVal("cope_over", e.target.value)} placeholder="פרפקציוניזם, שליטה, הישגיות מוגזמת..." style={ta} />
+            </div>
+            <div>
+              <label style={{ ...lbl, color: "#0369A1" }}>⚪ כניעה (Surrender)</label>
+              <textarea value={answers.cope_surr || ""} onChange={e => setVal("cope_surr", e.target.value)} placeholder="בידוד, פסיביות, תלות באחרים..." style={ta} />
+            </div>
+          </div>
+        </div>
+
+        {/* מחשבות אוטומטיות */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("💭", "מחשבות אוטומטיות טיפוסיות", "דוגמאות למחשבות שעולות במצבים ספציפיים")}
+          <textarea value={answers.auto_thoughts || ""} onChange={e => setVal("auto_thoughts", e.target.value)} placeholder='לדוגמה: "אני לא מסוגל", "הם חושבים עלי רע", "זה לא יצליח"' style={{ ...ta, minHeight: 100 }} />
+        </div>
+
+        {/* תכנית טיפול */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "18px", boxShadow: "0 1px 6px rgba(0,0,0,0.07)" }}>
+          {secTitle("🎯", "תכנית טיפול מבוססת המשגה")}
+          <label style={lbl}>מוקד הטיפול — מה נעבד קודם?</label>
+          <textarea value={answers.tx_focus || ""} onChange={e => setVal("tx_focus", e.target.value)} placeholder="האם נתחיל ממחשבות אוטומטיות? אמונות ביניים? הפעלה התנהגותית?" style={ta} />
+          <div style={{ marginTop: 12 }}><label style={lbl}>התערבויות מרכזיות מתוכננות</label>
+          <textarea value={answers.tx_interventions || ""} onChange={e => setVal("tx_interventions", e.target.value)} placeholder="Thought Record, Behavioral Activation, ERP, חשיפה הדרגתית..." style={ta} /></div>
+          <div style={{ marginTop: 12 }}><label style={lbl}>קשיים צפויים בטיפול</label>
+          <textarea value={answers.tx_obstacles || ""} onChange={e => setVal("tx_obstacles", e.target.value)} placeholder="התנגדות, קשיי שיעורי בית, דפוסים שעשויים להופיע בברית הטיפולית..." style={ta} /></div>
+        </div>
+
+        <button onClick={() => setSaved(true)} style={{ background: "#1D4ED8", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontWeight: 700, fontSize: 16, cursor: "pointer", fontFamily: "inherit" }}>
+          💾 שמור המשגה
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [tab, setTab] = useState("search");
   const [diagnosis, setDiagnosis] = useState("");
@@ -548,7 +699,7 @@ export default function App() {
 
       <div style={{ background: "#fff", borderBottom: "1px solid #E5E7EB" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", overflowX: "auto" }}>
-          {[["search","🔍 חיפוש"],["add","➕ הוספה"],["library",`📚 מאגר (${db.length})`],["community",`👥 קהילה (${therapists.length})`],["intake","📋 אינטייק"]].map(([key, label]) => (
+          {[["search","🔍 חיפוש"],["add","➕ הוספה"],["library",`📚 מאגר (${db.length})`],["community",`👥 קהילה (${therapists.length})`],["intake","📋 אינטייק"],["concept","🧩 המשגה"]].map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)} style={{ padding: "12px 16px", border: "none", background: "none", cursor: "pointer", fontWeight: tab === key ? 700 : 500, fontSize: 13, color: tab === key ? "#1D4ED8" : "#6B7280", borderBottom: tab === key ? "2.5px solid #1D4ED8" : "2.5px solid transparent", fontFamily: "inherit", whiteSpace: "nowrap" }}>{label}</button>
           ))}
         </div>
@@ -671,6 +822,7 @@ export default function App() {
         )}
 
         {tab === "intake" && <IntakeTab />}
+        {tab === "concept" && <ConceptTab />}
 
       </div>
     </div>
