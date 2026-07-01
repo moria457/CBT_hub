@@ -305,9 +305,9 @@ function ResourceModal({ item, onClose }) {
   async function expand() {
     setAiLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: `אתה מומחה CBT המתבסס על גישת ג'ודית בק. עבור: "${item.title}" תן הרחבה קלינית בעברית:\n\n🔬 עומק קליני: (מנגנון פסיכולוגי)\n⚠️ אתגרים שכיחים: (2-3)\n🎯 התאמות לאוכלוסיות: (ילדים, טראומה וכו')\n📋 דוגמה לשאלה סוקרטית\n\nקצר ומעשי.` }] })
+        body: JSON.stringify({ messages: [{ role: "user", content: `אתה מומחה CBT המתבסס על גישת ג'ודית בק. עבור: "${item.title}" תן הרחבה קלינית בעברית:\n\n🔬 עומק קליני: (מנגנון פסיכולוגי)\n⚠️ אתגרים שכיחים: (2-3)\n🎯 התאמות לאוכלוסיות: (ילדים, טראומה וכו')\n📋 דוגמה לשאלה סוקרטית\n\nקצר ומעשי.` }] })
       });
       const data = await res.json();
       setAiText(data.content?.map(b => b.text || "").join("") || "שגיאה.");
@@ -725,9 +725,9 @@ export default function App() {
     const q = diagnosis.trim().toLowerCase();
     const manual = db.filter(item => (item.tags || []).some(t => t.toLowerCase().includes(q)) || item.title.toLowerCase().includes(q) || (item.description || "").toLowerCase().includes(q));
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages: [{ role: "user", content: `אתה עוזר קליני CBT המתבסס על ג'ודית בק. עזרה עבור: "${diagnosis}".\n\n🔍 הבנת הבעיה לפי בק: (1-2 משפטים)\n📋 פרוטוקולים מומלצים: (2-3)\n☑ שאלונים מומלצים: (2-3)\n📖 נושאי פסיכואדוקציה: (2-3)\n📗 הפניה לספר בק:\n💡 טיפ קליני:\n\nעברית בלבד, קצר ומעשי.` }] })
+        body: JSON.stringify({ messages: [{ role: "user", content: `אתה עוזר קליני CBT המתבסס על ג'ודית בק. עזרה עבור: "${diagnosis}".\n\n🔍 הבנת הבעיה לפי בק: (1-2 משפטים)\n📋 פרוטוקולים מומלצים: (2-3)\n☑ שאלונים מומלצים: (2-3)\n📖 נושאי פסיכואדוקציה: (2-3)\n📗 הפניה לספר בק:\n💡 טיפ קליני:\n\nעברית בלבד, קצר ומעשי.` }] })
       });
       const data = await res.json();
       setAiResults({ aiText: data.content?.map(b => b.text || "").join("") || "שגיאה.", manual });
